@@ -33,7 +33,7 @@ class ODBCConnector(ToucanConnector):
     def _retrieve_data(self, datasource: ODBCDataSource) -> pd.DataFrame:
         connection = pyodbc.connect(self.connection_string, **self.get_connection_params())
 
-        query_params = data_source.parameters or {}
+        query_params = datasource.parameters or {}
         df = pd.read_sql(datasource.query, con=connection, params=query_params)
 
         connection.close()
