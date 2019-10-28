@@ -34,6 +34,10 @@ class ODBCConnector(ToucanConnector):
         connection = pyodbc.connect(self.connection_string, **self.get_connection_params())
 
         query_params = datasource.parameters or {}
+        # Apparently ODBC only supports qmark paramstyle
+        # (https://www.python.org/dev/peps/pep-0249/#paramstyle)
+        # so it expects a list of values, not a dict:
+        query_params = list(query_params.values())
         df = pd.read_sql(datasource.query, con=connection, params=query_params)
 
         connection.close()
