@@ -3,6 +3,10 @@ import pyodbc
 import pandas as pd
 from pydantic import constr
 
+<<<<<<< HEAD
+=======
+from toucan_connectors.common import nosql_apply_parameters_to_query
+>>>>>>> b07fabed846e7d9b04baeea57ff99f7e143cd99a
 from toucan_connectors.toucan_connector import ToucanDataSource, ToucanConnector
 
 
@@ -34,7 +38,18 @@ class ODBCConnector(ToucanConnector):
         connection = pyodbc.connect(self.connection_string, **self.get_connection_params())
 
         query_params = datasource.parameters or {}
-        df = pd.read_sql(datasource.query, con=connection, params=query_params)
+
+        # <FIXME: UNSAFE>
+        query_params = {k: f'"{v}"' for k, v in query_params.items()}  # add enclosing quotes
+        q = nosql_apply_parameters_to_query(datasource.query, query_params)
+        df = pd.read_sql(q, con=connection)
+        # </UNSAFE>
+
+        # # Apparently ODBC only supports qmark paramstyle
+        # # (https://www.python.org/dev/peps/pep-0249/#paramstyle)
+        # # so it expects a list of values, not a dict:
+        # query_params = list(query_params.values())
+        # df = pd.read_sql(datasource.query, con=connection, params=query_params)
 
         connection.close()
         return df

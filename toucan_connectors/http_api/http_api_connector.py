@@ -1,14 +1,14 @@
 from enum import Enum
+from typing import List, Union
 
-from jq import jq
 import pandas as pd
-from pydantic import BaseModel, Schema
+from jq import jq
+from pydantic import BaseModel, FilePath, Schema
 from requests import Session
-from typing import Union
 
-from toucan_connectors.toucan_connector import ToucanConnector, ToucanDataSource
-from toucan_connectors.common import nosql_apply_parameters_to_query
 from toucan_connectors.auth import Auth
+from toucan_connectors.common import nosql_apply_parameters_to_query
+from toucan_connectors.toucan_connector import ToucanConnector, ToucanDataSource
 
 
 def transform_with_jq(data: object, jq_filter: str) -> list:
@@ -54,6 +54,7 @@ class HttpAPIConnector(ToucanConnector):
     data_source_model: HttpAPIDataSource
 
     baseroute: str
+    cert: List[FilePath] = None
     auth: Auth = None
     template: Template = None
 
@@ -71,7 +72,9 @@ class HttpAPIConnector(ToucanConnector):
         available_params = ['url', 'method', 'params', 'data', 'json', 'headers', 'proxies']
         query = {k: v for k, v in query.items() if k in available_params}
         query['url'] = '/'.join([self.baseroute.rstrip('/'), query['url'].lstrip('/')])
-
+        if self.cert:
+            # `cert` is a list of PosixPath. `request` needs a list of strings for certificates
+            query['cert'] = [str(c) for c in self.cert]
         res = session.request(**query)
 
         try:
@@ -94,8 +97,7 @@ class HttpAPIConnector(ToucanConnector):
             session = Session()
 
         query = nosql_apply_parameters_to_query(
-            data_source.dict(by_alias=True),
-            data_source.parameters
+            data_source.dict(by_alias=True), data_source.parameters
         )
 
         if self.template:
