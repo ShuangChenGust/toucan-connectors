@@ -3,10 +3,7 @@ import pyodbc
 import pandas as pd
 from pydantic import constr
 
-<<<<<<< HEAD
-=======
 from toucan_connectors.common import nosql_apply_parameters_to_query
->>>>>>> b07fabed846e7d9b04baeea57ff99f7e143cd99a
 from toucan_connectors.toucan_connector import ToucanDataSource, ToucanConnector
 
 
