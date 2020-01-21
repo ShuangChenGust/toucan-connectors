@@ -1,7 +1,7 @@
 # OracleSQL connector
 
-⚠️ Using this connector requires the installation of [Oracle Instant client](http://www.oracle.com/technetwork/database/database-technologies/instant-client/overview/index.html) library. Oracle Github provides the different steps to install the package [installation instructions](https://oracle.github.io/odpi/doc/installation.html#)
-Alternatively, you can refer to Oracle [installation instructions](https://docs.oracle.com/en/database/oracle/oracle-database/12.2/lnoci/instant-client.html#GUID-7D65474A-8790-4E81-B535-409010791C2F) as it probably won't be available in your server current package manager.
+⚠️ Using this connector requires the installation of [Oracle Instant client](http://www.oracle.com/technetwork/database/database-technologies/instant-client/overview/index.html) library. The most ease way to install the package is to follow the different steps presents on the Oracle Github [installation instructions](https://oracle.github.io/odpi/doc/installation.html#).
+Alternatively, you can refer to Oracle website [installation instructions](https://docs.oracle.com/en/database/oracle/oracle-database/12.2/lnoci/instant-client.html#GUID-7D65474A-8790-4E81-B535-409010791C2F) as it probably won't be available in your server current package manager.
 
 ## Data provider configuration
 
