@@ -5,6 +5,7 @@ from setuptools import find_packages, setup
 auth_deps = ['oauthlib', 'requests_oauthlib']
 extras_require = {
     'adobe': ['adobe_analytics'],
+    'aircall': ['bearer'],
     'azure_mssql': ['pyodbc'],
     'dataiku': ['dataiku-api-client'],
     'elasticsearch': ['elasticsearch'],
@@ -13,9 +14,11 @@ extras_require = {
     'google_big_query': ['pandas_gbq'],
     'google_cloud_mysql': ['PyMySQL>=0.8.0'],
     'google_my_business': ['google-api-python-client>=1.7.5'],
+    'google_sheets': ['bearer'],
     'google_spreadsheet': ['gspread>=3', 'oauth2client'],
     'hive': ['pyhive[hive]'],
     'http_api': auth_deps,
+    'lightspeed': ['bearer'],
     'mongo': ['pymongo>=3.6.1'],
     'mssql': ['pymssql>=2.1.3,<3.0'],
     'mysql': ['PyMySQL>=0.8.0'],
@@ -49,7 +52,7 @@ classifiers = [
 
 setup(
     name='toucan_connectors',
-    version='0.28.3',
+    version='0.29.1',
     description='Toucan Toco Connectors',
     author='Toucan Toco',
     author_email='dev@toucantoco.com',

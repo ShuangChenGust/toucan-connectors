@@ -1,5 +1,6 @@
 import logging
 import operator
+import os
 import socket
 from abc import ABCMeta, abstractmethod
 from enum import Enum
@@ -11,6 +12,11 @@ import tenacity as tny
 from pydantic import BaseModel
 
 from toucan_connectors.common import render_raw_permissions
+
+try:
+    from bearer import Bearer
+except ImportError:
+    pass
 
 
 class DataSlice(NamedTuple):
@@ -195,6 +201,18 @@ class ToucanConnector(BaseModel, metaclass=ABCMeta):
             cls.logger = logging.getLogger(cls.__name__)
         except KeyError as e:
             raise TypeError(f'{cls.__name__} has no {e} attribute.')
+        if 'bearer_integration' in cls.__fields__:
+            cls.bearer_integration = cls.__fields__['bearer_integration'].default
+
+    def bearer_oauth_get_endpoint(self, endpoint: str):
+        """Generic method to get an endpoint for an OAuth API integrated with Bearer"""
+        return (
+            Bearer(os.environ.get('BEARER_API_KEY'))
+            .integration(self.bearer_integration)
+            .auth(self.bearer_auth_id)
+            .get(endpoint)
+            .json()
+        )
 
     @property
     def retry_decorator(self):
